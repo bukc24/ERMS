@@ -1,0 +1,16 @@
+{
+  "name": "erms",
+  "version": "1.0.0",
+  "description": "The purpose is to create and implement the emergency management system in a hospital",
+  "main": "app.js",
+  "scripts": {
+    "test": "node test.js",
+    "start": "nodemon app.js"
+  },
+  "author": "shujaat",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0"
+  }
+}
