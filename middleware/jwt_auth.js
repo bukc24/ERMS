@@ -2,40 +2,31 @@ const jwt = require('jsonwebtoken')
 const executeQuery = require('../functions/executeQuery')
 
 
+
 async function jwt_authenticate_user(req, res, next) {
   try {
-    const rawToken = req.headers.authorization;
-    if (!rawToken || !rawToken.startsWith('Bearer ')) {
-      return res.status(401).send({ error: 'Invalid token format' });
-    }
+    //get token
+    const token = req.cookies.token;
 
-    const token = rawToken.replace('Bearer ', '');
-
-    const sqlQuery = `
-      SELECT * FROM jwts
-      WHERE token = '${token}';
-    `;
-
+    //check token is valid and 
     try {
-      const result = await executeQuery(sqlQuery);
-
-      if (!result || result.length === 0) {
-        return res.status(401).send({ error: 'Invalid token' });
-      }
-
+      
+      //check token is valid 
       const decodedData = jwt.verify(token, 'thisisdevelopment');
-
-      const userID = await executeQuery(`SELECT user_id FROM users WHERE email LIKE '${decodedData.email}'`);
+      //check user exists
+      const userID = await executeQuery(`SELECT email FROM ER_Receptionist WHERE email LIKE '${decodedData.email}'`);
 
       req.user_id = userID[0].user_id;
       next();
     } catch (error) {
       console.error(error);
-      return res.status(401).send({ error: 'Token verification failed' });
+      res.clearCookie("token")
+      res.status(401)
+      return res.redirect("/")
     }
   } catch (err) {
     console.error(err);
-    res.status(500).send({ error: 'Internal Server Error' });
+    res.status(401).send({ error: 'Unauthorized' });
   }
 }
 

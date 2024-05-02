@@ -1,8 +1,7 @@
 const sql = require("msnodesqlv8");
-const connectionString = "server=DESKTOP-IJD5VE0;Database=showcase2;Trusted_Connection=Yes;Driver={SQL Server Native Client 11.0}";//SERVER and DATABASE NAME
 
-
-async function executeQuery(query) {
+async function executeQuery(server,query) {
+    const connectionString = `server=${server};Database=HospitalManagementSystem;Trusted_Connection=Yes;Driver={ODBC Driver 17 for SQL Server}`;//SERVER and DATABASE NAME
     return new Promise((resolve, reject) => {
       sql.query(connectionString, query, (err, rows) => {
         if (err) {
@@ -13,6 +12,7 @@ async function executeQuery(query) {
       });
     });
   }
+
 
 
   module.exports = executeQuery
