@@ -1,15 +1,22 @@
 const express = require('express')
+const {jwt_auth} = require('../middleware/jwt_auth')
 const router = express.Router()
 
 //controller  functions
 const {
     index,
-    login
+    login,
+    loginView,
+    signup,
+    signupView,
+    logout,
 } = require("../controllers/erms")
 
 
 //routes 
-router.route('/').get(index)
-router.route('/login').get(login)
+router.route('/dashboard').get(jwt_auth,index)
+router.route('/login').get(loginView).post(login)
+router.route('/signup').get(signupView).post(signup)
+router.route('/logout').get(logout)
 
 module.exports= router
