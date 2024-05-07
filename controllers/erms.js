@@ -2,15 +2,21 @@ const path = require('path')
 const bcrypt = require('bcrypt')
 const executeQuery = require('../functions/executeQuery')
 const {createJWTAndSendResponse} = require('../functions/createJWTAndSendResponse')
+const jwt_auth = require('../middleware/jwt_auth')
 require('dotenv').config({ path: '../.env' });
 
-const index = (req,res)=>{
-        res.sendFile(path.join(__dirname,'..','public','index.html'));
-}
 
+
+const index = (req,res)=>{
+  //TO DO: LIST NUMBER OF PATIENTS IN ER, NUMBER OF DOCTORS IN ER,
+  // LIST THE PATIENTS IN ER AND CLICKING ON A PATIENT REDIRECTS TO /patient/:patientID
+  
+    res.sendFile(path.join(__dirname,'..','public','index.html'));
+}
 
 // LOGIN
 const loginView = (req,res)=>{
+  
     res.sendFile(path.join(__dirname,'..','public','login.html'));
 }
 
@@ -75,10 +81,62 @@ const signup = async (req,res)=>{
 }
 
 
-//logout
+//LOGOUT
 const logout = (req,res)=>{
     res.clearCookie("token")
     res.redirect('/login')
+}
+
+//PATIENT ADMIT
+/* 
+GET: A FORM WHERE PATIENT ID IS ENTERED ALONG WITH OTHER DATA FOR ADMITTED
+POST: CREATE AN ENTRY IN PatientsInER ; REDIRECT TO THAT PATIENTS DETAIL PAGE
+*/
+const admitView = (req,res) =>{
+  //display form page
+}
+
+const admit = (req,res)=>{
+  const patientID = req.body.patientID;
+    const otherData = req.body.otherData;
+
+    // Create an entry in the PatientsInER array (simulating database)
+    
+
+    // Redirect to the detail page of the admitted patient
+    res.redirect(`/patient/${patientID}`);
+}
+
+//PATIENT REGISTER
+/* 
+GET: FORM FOR CREATING A PATIENT RECORD
+POST: CREATE AN ENTRY IN Patients; REDIRECT TO PREFILLED ADMIT FORM WITH PATIENT ID
+*/
+
+//EMERGENCY CALL
+/* 
+GET: FORM FOR ACCEPTING CALLER DETAILS
+POST :
+*/
+
+//LAB TEST REQUEST
+/* 
+GET: FORM FOR REQUEST LAB TEST
+POST :
+*/
+
+//MEDICINE REQUEST
+/* 
+GET:A FORM FOR REQUESTING MEDICINE
+POST :
+*/
+
+
+
+
+//404
+const pageDoesNotExist =  (req, res) => {
+  res.status(404).send('<h1>404! Page not found</h1>'); 
 }
 
 module.exports ={
@@ -88,4 +146,5 @@ module.exports ={
     signup,
     signupView,
     logout,
+    pageDoesNotExist
 }
