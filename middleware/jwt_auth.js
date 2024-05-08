@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const executeQuery = require('../functions/executeQuery')
-require('dotenv').config({ path: '../.env' });
+
 
 
 async function jwt_authenticate_user(req, res, next) {
@@ -14,7 +14,7 @@ async function jwt_authenticate_user(req, res, next) {
       //check token is valid 
       const decodedData = jwt.verify(token, 'thisisdevelopment');
       //check user exists
-      const userID = await executeQuery(process.env.DB_SERVER,`SELECT email FROM ER_Receptionist WHERE email LIKE '${decodedData.email}'`);
+      const userID = await executeQuery(`SELECT email FROM ER_Receptionist WHERE email LIKE '${decodedData.email}'`);
 
       req.user_id = userID[0].user_id;
       next();
@@ -22,7 +22,7 @@ async function jwt_authenticate_user(req, res, next) {
       console.error(error);
       res.clearCookie("token")
       res.status(401)
-      return res.redirect("/")
+      return res.redirect("/login")
     }
   } catch (err) {
     console.error(err);

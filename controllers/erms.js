@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt')
 const executeQuery = require('../functions/executeQuery')
 const {createJWTAndSendResponse} = require('../functions/createJWTAndSendResponse')
 const jwt_auth = require('../middleware/jwt_auth')
-require('dotenv').config({ path: '../.env' });
+
 
 
 
@@ -24,7 +24,7 @@ const login = async (req,res)=>{
     const sqlQuery = `SELECT * FROM ER_Receptionist WHERE email = '${req.body.email}'`;
   
     try {
-      const result = await executeQuery(process.env.DB_SERVER,sqlQuery);
+      const result = await executeQuery(sqlQuery);
       console.log(result)
       if (result.length != 0) {
   
@@ -68,7 +68,7 @@ const signup = async (req,res)=>{
       const sqlQuery = `EXEC AddUser '${user.email}', '${user.password}'`;
   
       try {
-        const result=await executeQuery(process.env.DB_SERVER,sqlQuery)
+        const result=await executeQuery(sqlQuery)
         console.log(result)
         res.status(200)
         res.redirect("/login")
