@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [HospitalManagementSystem]    Script Date: 5/2/2024 11:17:47 PM ******/
+/****** Object:  Database [HospitalManagementSystem]    Script Date: 5/10/2024 12:54:46 AM ******/
 CREATE DATABASE [HospitalManagementSystem]
 GO
 ALTER DATABASE [HospitalManagementSystem] SET COMPATIBILITY_LEVEL = 160
@@ -54,7 +54,7 @@ ALTER DATABASE [HospitalManagementSystem] SET READ_COMMITTED_SNAPSHOT OFF
 GO
 ALTER DATABASE [HospitalManagementSystem] SET HONOR_BROKER_PRIORITY OFF 
 GO
-ALTER DATABASE [HospitalManagementSystem] SET RECOVERY FULL 
+ALTER DATABASE [HospitalManagementSystem] SET RECOVERY SIMPLE 
 GO
 ALTER DATABASE [HospitalManagementSystem] SET  MULTI_USER 
 GO
@@ -78,7 +78,75 @@ ALTER DATABASE [HospitalManagementSystem] SET QUERY_STORE (OPERATION_MODE = READ
 GO
 USE [HospitalManagementSystem]
 GO
-/****** Object:  Table [dbo].[Admin]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Patient]    Script Date: 5/10/2024 12:54:46 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Patient](
+	[PatientID] [int] IDENTITY(1,1) NOT NULL,
+	[PatientName] [varchar](100) NULL,
+	[DOB] [date] NULL,
+	[Gender] [char](1) NULL,
+	[Contact] [varchar](20) NULL,
+	[Address] [varchar](255) NULL,
+	[Email] [varchar](100) NULL,
+	[Password] [varchar](100) NULL,
+	[Status] [varchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[PatientID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PatientsInER]    Script Date: 5/10/2024 12:54:47 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PatientsInER](
+	[PatientID] [int] IDENTITY(1,1) NOT NULL,
+	[RequestID] [int] NULL,
+	[Status] [varchar](50) NULL,
+	[Triage] [varchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[PatientID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  UserDefinedFunction [dbo].[GetPatientsInER]    Script Date: 5/10/2024 12:54:47 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE FUNCTION [dbo].[GetPatientsInER]()
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT p.PatientID, p.PatientName, p.DOB, p.Gender, p.Contact, p.Address, pe.RequestID, pe.Status, pe.Triage
+    FROM PatientsInER pe
+    INNER JOIN Patient p ON pe.PatientID = p.PatientID
+);
+GO
+/****** Object:  UserDefinedFunction [dbo].[GetPatientsNotInER]    Script Date: 5/10/2024 12:54:47 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE FUNCTION [dbo].[GetPatientsNotInER]()
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT p.PatientID, p.PatientName, p.DOB, p.Gender, p.Contact, p.Address
+    FROM PatientsInER pe
+    RIGHT OUTER JOIN Patient p ON pe.PatientID = p.PatientID
+    WHERE pe.PatientID IS NULL
+);
+GO
+/****** Object:  Table [dbo].[Admin]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -91,14 +159,13 @@ CREATE TABLE [dbo].[Admin](
 	[Contact] [varchar](20) NULL,
 	[Role] [varchar](50) NULL,
 	[Permission] [varchar](max) NULL,
-	[LastLogin] [datetime] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[AdminID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Ambulance]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Ambulance]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -115,7 +182,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AmbulanceRequest]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[AmbulanceRequest]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -132,7 +199,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Appointment]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Appointment]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -150,7 +217,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Control]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Control]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -168,7 +235,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Department]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Department]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -183,7 +250,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DepartmentHead]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[DepartmentHead]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -198,7 +265,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Diagnosis]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Diagnosis]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -212,16 +279,14 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Doctor]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Doctor]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Doctor](
 	[DoctorID] [int] IDENTITY(1,1) NOT NULL,
-	[DeptID] [int] NULL,
 	[Specialization] [varchar](100) NULL,
-	[Status] [varchar](20) NULL,
 	[OPDCharges] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
@@ -229,7 +294,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DoctorFeeBilling]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[DoctorFeeBilling]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -241,14 +306,13 @@ CREATE TABLE [dbo].[DoctorFeeBilling](
 	[AppointmentID] [int] NULL,
 	[Date] [date] NULL,
 	[TotalAmount] [decimal](10, 2) NULL,
-	[PaymentMethod] [varchar](50) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[BillingID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DoctorShift]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[DoctorShift]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -268,7 +332,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmergencyCall]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[EmergencyCall]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -286,7 +350,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Employee]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Employee]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -311,7 +375,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ER_Receptionist]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[ER_Receptionist]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -330,7 +394,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Feedback]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Feedback]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -346,7 +410,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Inventory]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Inventory]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -361,7 +425,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Issue]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Issue]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -377,14 +441,14 @@ CREATE TABLE [dbo].[Issue](
 	[Status] [varchar](20) NULL,
 	[Remarks] [varchar](max) NULL,
 	[ResolvedBy] [int] NULL,
-	[CompetitionDate] [date] NULL,
+	[CompletionDate] [date] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[IssueID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[LabInvoices]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[LabInvoices]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -399,7 +463,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[LabResults]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[LabResults]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -416,7 +480,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Manufacturer]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Manufacturer]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -433,7 +497,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ManufacturerMedicine]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[ManufacturerMedicine]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -448,7 +512,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[MedBilling]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[MedBilling]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -465,7 +529,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[MedicalHistory]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[MedicalHistory]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -473,7 +537,6 @@ GO
 CREATE TABLE [dbo].[MedicalHistory](
 	[MedicalHistoryID] [int] IDENTITY(1,1) NOT NULL,
 	[PatientID] [int] NULL,
-	[Diagnosis] [varchar](max) NULL,
 	[TreatmentHistory] [varchar](max) NULL,
 	[Allergies] [varchar](max) NULL,
 	[PreviousSurgeries] [varchar](max) NULL,
@@ -484,7 +547,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Medicine]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Medicine]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -503,7 +566,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[MedStock]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[MedStock]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -520,44 +583,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Patient]    Script Date: 5/2/2024 11:17:48 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Patient](
-	[PatientID] [int] IDENTITY(1,1) NOT NULL,
-	[PatientName] [varchar](100) NULL,
-	[DOB] [date] NULL,
-	[Gender] [char](1) NULL,
-	[Contact] [varchar](20) NULL,
-	[Address] [varchar](255) NULL,
-	[Email] [varchar](100) NULL,
-	[Password] [varchar](100) NULL,
-	[Status] [varchar](50) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[PatientID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[PatientsInER]    Script Date: 5/2/2024 11:17:48 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[PatientsInER](
-	[PatientID] [int] IDENTITY(1,1) NOT NULL,
-	[RequestID] [int] NULL,
-	[Status] [varchar](50) NULL,
-	[Triage] [varchar](50) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[PatientID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[PatientsInERHistory]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[PatientsInERHistory]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -569,7 +595,7 @@ CREATE TABLE [dbo].[PatientsInERHistory](
 	[Status] [varchar](50) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[PatientTest]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[PatientTest]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -584,7 +610,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Pharmacist]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Pharmacist]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -598,7 +624,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Prescription]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Prescription]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -606,7 +632,6 @@ GO
 CREATE TABLE [dbo].[Prescription](
 	[PrescriptionID] [int] IDENTITY(1,1) NOT NULL,
 	[AppointmentID] [int] NULL,
-	[DiagnosisID] [int] NULL,
 	[ClinicalNotes] [varchar](max) NULL,
 	[Status] [varchar](20) NULL,
 	[Date] [date] NULL,
@@ -616,7 +641,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[PrescriptionDiagnosis]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[PrescriptionDiagnosis]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -633,7 +658,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[PrescriptionMedicine]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[PrescriptionMedicine]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -653,7 +678,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Report]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Report]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -664,7 +689,6 @@ CREATE TABLE [dbo].[Report](
 	[Description] [varchar](max) NULL,
 	[GeneratedBy] [int] NULL,
 	[Timestamp] [datetime] NULL,
-	[Format] [varchar](50) NULL,
 	[DeptID] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
@@ -672,7 +696,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Samples]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Samples]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -690,7 +714,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Supplier]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[Supplier]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -706,7 +730,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TestCountAndStatus]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[TestCountAndStatus]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -723,7 +747,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TestFields]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[TestFields]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -738,7 +762,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TestFieldsBridge]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[TestFieldsBridge]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -753,7 +777,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TestOrders]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[TestOrders]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -770,7 +794,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TestRequirements]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[TestRequirements]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -786,7 +810,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TotalLabTest]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[TotalLabTest]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -802,7 +826,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[VitalSigns]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  Table [dbo].[VitalSigns]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -848,9 +872,6 @@ REFERENCES [dbo].[Department] ([DeptID])
 GO
 ALTER TABLE [dbo].[DepartmentHead]  WITH CHECK ADD FOREIGN KEY([HOD])
 REFERENCES [dbo].[Employee] ([EmpID])
-GO
-ALTER TABLE [dbo].[Doctor]  WITH CHECK ADD FOREIGN KEY([DeptID])
-REFERENCES [dbo].[Department] ([DeptID])
 GO
 ALTER TABLE [dbo].[DoctorFeeBilling]  WITH CHECK ADD FOREIGN KEY([AppointmentID])
 REFERENCES [dbo].[Appointment] ([AppointmentID])
@@ -930,9 +951,6 @@ GO
 ALTER TABLE [dbo].[Prescription]  WITH CHECK ADD FOREIGN KEY([AppointmentID])
 REFERENCES [dbo].[Appointment] ([AppointmentID])
 GO
-ALTER TABLE [dbo].[Prescription]  WITH CHECK ADD FOREIGN KEY([DiagnosisID])
-REFERENCES [dbo].[Diagnosis] ([DiagnosisID])
-GO
 ALTER TABLE [dbo].[PrescriptionDiagnosis]  WITH CHECK ADD FOREIGN KEY([DiagnosisID])
 REFERENCES [dbo].[Diagnosis] ([DiagnosisID])
 GO
@@ -981,7 +999,7 @@ GO
 ALTER TABLE [dbo].[VitalSigns]  WITH CHECK ADD FOREIGN KEY([PatientID])
 REFERENCES [dbo].[PatientsInER] ([PatientID])
 GO
-/****** Object:  StoredProcedure [dbo].[AddUser]    Script Date: 5/2/2024 11:17:48 PM ******/
+/****** Object:  StoredProcedure [dbo].[AddUser]    Script Date: 5/10/2024 12:54:47 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
