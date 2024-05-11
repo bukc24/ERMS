@@ -111,24 +111,35 @@ const admit = (req,res)=>{
 /* 
 GET: FORM FOR CREATING A PATIENT RECORD
 POST: CREATE AN ENTRY IN Patients; REDIRECT TO PREFILLED ADMIT FORM WITH PATIENT ID
+    Database-Exec InsertPatient (@patientName, @dob, @gender, @contact, @address, @email, @password
 */
 
 //EMERGENCY CALL
 /* 
 GET: FORM FOR ACCEPTING CALLER DETAILS
+
 POST :
+    database: Exec InsertCallerDetails @CallerName, @ContactNumber, @Description, @Location
 */
+
 
 //LAB TEST REQUEST
 /* 
-GET: FORM FOR REQUEST LAB TEST
-POST :
+GET: FORM FOR REQUESTING LAB TEST
+POST: Submit form and redirect to patient page
 */
+
 
 //MEDICINE REQUEST
 /* 
 GET:A FORM FOR REQUESTING MEDICINE
-POST :
+POST: Submit form and redirect to patient page
+*/
+
+
+//Patient page
+/*
+GET: sHOW PATIENT DETAILS, WITH LI
 */
 
 
