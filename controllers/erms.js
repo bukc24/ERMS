@@ -54,7 +54,7 @@ const login = async (req,res)=>{
 
 //SIGN UP
 const signupView = (req,res)=>{
-    res.sendFile(path.join(__dirname,'..','public','login.html'));
+    res.sendFile(path.join(__dirname,'..','public','signup.html'));
 }
 
 const signup = async (req,res)=>{
@@ -111,13 +111,12 @@ const admit = (req,res)=>{
 /* 
 GET: FORM FOR CREATING A PATIENT RECORD
 POST: CREATE AN ENTRY IN Patients; REDIRECT TO PREFILLED ADMIT FORM WITH PATIENT ID
-    Database-Exec InsertPatient (@patientName, @dob, @gender, @contact, @address, @email, @password
+    Database-Exec InsertPatient (@patientName, @dob, @gender, @contact, @address, @email, @password)
 */
 
 //EMERGENCY CALL
 /* 
 GET: FORM FOR ACCEPTING CALLER DETAILS
-
 POST :
     database: Exec InsertCallerDetails @CallerName, @ContactNumber, @Description, @Location
 */
@@ -139,7 +138,7 @@ POST: Submit form and redirect to patient page
 
 //Patient page
 /*
-GET: sHOW PATIENT DETAILS, WITH LI
+GET: SHOW PATIENT DETAILS, LIKE 
 */
 
 

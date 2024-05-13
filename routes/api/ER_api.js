@@ -38,11 +38,12 @@ router.route('/patients_not_in_ER').get(jwt_auth,async (req,res)=>{
 
 
 //searching patients
-router.route('/patients_in_ER/:query').get(jwt_auth,async (req,res)=>{
+router.route('/patients_in_ER/:q').get(jwt_auth,async (req,res)=>{
     //FRONTEND: fetch('api/patients_in_ER').then(response=>response.json()).then(data=>{console.log(data)})
-    const query = req.params.query;
-    query = `Select * from GetPatientsInER() where patientID = ?;`//patients in ER function
-    const parameters = [query];
+    const q = req.params.q;
+    query = `Select * from GetPatientsInER() 
+    where patientid=? or PatientName like '%'+?+'%' or address like '%'+?+'%';`//patients in ER function
+    const parameters = [q,q,q];
     try {
         const result = await executeParameterizedQuery(query,parameters)
         console.log(result)
@@ -53,11 +54,12 @@ router.route('/patients_in_ER/:query').get(jwt_auth,async (req,res)=>{
     }
 })
 
-router.route('/patients_not_in_ER/:query').get(jwt_auth,async (req,res)=>{
+router.route('/patients_not_in_ER/:q').get(jwt_auth,async (req,res)=>{
     //FRONTEND: fetch('api/patients_not_in_ER').then(response=>response.json()).then(data=>{console.log(data)})
-    const query = req.params.query;
-    query = `Select * from GetPatientsNotInER() where patientID = ?;`//patients in ER function
-    const parameters = [query];
+    const q = req.params.q;
+    const query = `Select * from GetPatientsNotInER() 
+    where patientid=? or PatientName like '%'+?+'%' or address like '%'+?+'%';`//patients in ER function
+    const parameters = [q,q,q];
 
     try {
         const result = await executeParameterizedQuery(query,parameters)
