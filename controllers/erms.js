@@ -11,13 +11,13 @@ const index = (req,res)=>{
   //TO DO: LIST NUMBER OF PATIENTS IN ER, NUMBER OF DOCTORS IN ER,
   // LIST THE PATIENTS IN ER AND CLICKING ON A PATIENT REDIRECTS TO /patient/:patientID
   
-    res.sendFile(path.join(__dirname,'..','public','index.html'));
+    res.sendFile(path.join(__dirname,'..','public','emergency','index-2.html'));
 }
 
 // LOGIN
 const loginView = (req,res)=>{
   
-    res.sendFile(path.join(__dirname,'..','public','login.html'));
+    res.sendFile(path.join(__dirname,'..','public','emergency','login.html'));
 }
 
 const login = async (req,res)=>{
@@ -54,7 +54,7 @@ const login = async (req,res)=>{
 
 //SIGN UP
 const signupView = (req,res)=>{
-    res.sendFile(path.join(__dirname,'..','public','signup.html'));
+    res.sendFile(path.join(__dirname,'..','public','emergency','register.html'));
 }
 
 const signup = async (req,res)=>{
@@ -113,14 +113,42 @@ GET: FORM FOR CREATING A PATIENT RECORD
 POST: CREATE AN ENTRY IN Patients; REDIRECT TO PREFILLED ADMIT FORM WITH PATIENT ID
     Database-Exec InsertPatient (@patientName, @dob, @gender, @contact, @address, @email, @password)
 */
+const registerView = (req,res)=>{
+  
+}
+
+const register = (req,res)=>{
+  const patientID = req.body.patientID;
+    const otherData = req.body.otherData;
+
+    // Create an entry in the PatientsInER array (simulating database)
+    
+
+    // Redirect to the detail page of the admitted patient
+    res.redirect(`/patient/${patientID}`);
+}
+
 
 //EMERGENCY CALL
 /* 
+GET: PAGE OF EMERGENCY CALLS
+
 GET: FORM FOR ACCEPTING CALLER DETAILS
+
 POST :
     database: Exec InsertCallerDetails @CallerName, @ContactNumber, @Description, @Location
 */
+const emergency = (req,res) => {
+  res.sendFile(path.join(__dirname,'..','public','emergency','emergency-call.html'));
+}
 
+const emergencyRecordView = (req,res)=>{
+  res.sendFile(path.join(__dirname,'..','public','emergency','add-emergency-details.html'));
+}
+
+const emergencyRecord = (req,res)=>{
+
+}
 
 //LAB TEST REQUEST
 /* 
@@ -146,7 +174,7 @@ GET: SHOW PATIENT DETAILS, LIKE
 
 //404
 const pageDoesNotExist =  (req, res) => {
-  res.status(404).send('<h1>404! Page not found</h1>'); 
+  res.status(404).sendFile(path.join(__dirname,'..','public','emergency','error-404.html'));
 }
 
 module.exports ={
@@ -156,5 +184,8 @@ module.exports ={
     signup,
     signupView,
     logout,
+    emergency,
+    emergencyRecordView,
+    emergencyRecord,
     pageDoesNotExist
 }
