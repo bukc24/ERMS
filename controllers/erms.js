@@ -1,6 +1,7 @@
 const path = require('path')
 const bcrypt = require('bcrypt')
 const executeQuery = require('../functions/executeQuery')
+const executeParameterizedQuery = require('../functions/executeParameterizedQuery')
 const {createJWTAndSendResponse} = require('../functions/createJWTAndSendResponse')
 const jwt_auth = require('../middleware/jwt_auth')
 
@@ -146,8 +147,24 @@ const emergencyRecordView = (req,res)=>{
   res.sendFile(path.join(__dirname,'..','public','emergency','add-emergency-details.html'));
 }
 
-const emergencyRecord = (req,res)=>{
-
+const emergencyRecord = async (req,res)=>{
+  const name = req.body.name
+  const contact = req.body.contact
+  const description = req.body.description
+  const location = req.body.location
+  
+  const sqlQuery = `EXEC InsertCallerDetails ?, ?, ?, ?`;
+  parameters = [name,contact,description,location]
+  try {
+    const result=await executeParameterizedQuery(sqlQuery,parameters)
+    console.log(result)
+    res.status(200)
+    res.redirect("/emergency_call")
+    
+  } catch (err) {
+    console.error('Error in SignUP query:', err);
+    res.status(500).send(err);
+  }
 }
 
 //LAB TEST REQUEST

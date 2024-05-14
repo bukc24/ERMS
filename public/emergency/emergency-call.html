@@ -210,49 +210,28 @@
                         <h4 class="page-title">Emergency Call Details</h4>
                     </div>
                     <div class="col-sm-8 col-9 text-right m-b-20">
-                        <a href="/emergency_call_record" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Details</a>
+                        <a href="/emergency_call/record" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Details</a>
                     </div>
                 </div>
 				<div class="row">
 					<div class="col-md-12">
 						<div class="table-responsive">
-							<table class="table table-striped custom-table">
+							<table id='request-table' class="table table-striped custom-table">
 								<thead>
 									<tr>
-										<th>Call ID</th>
+										<th>Request ID</th>
 										<th>Caller Name</th>
-										<th>Contact No</th>
-										<th>Vital Sign</th>
+										<th>Contact No</th>										
 										<th>Description</th>
 										<th>Location</th>
-										<th>Time</th>
-										<th>Status</th>
+										<th>Dispatch Time</th>
 										<th>Ambulance</th>
+										<th></th>
+										<th></th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>1</td>
-										<td>Uamir</td>
-										<td>03659864321</td>
-										<td>High Fever</td>
-										<td>-</td>
-										<td>Gulshan</td>
-										<td>10:00am</td>
-										<td><span class="custom-badge status-red">Inactive</span></td>
-										<td>1st</td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>Kamran</td>
-										<td>03659864321</td>
-										<td>Stomach pain</td>
-										<td>-</td>
-										<td>Bahadurabad</td>
-										<td>11:00am</td>
-										<td><span class="custom-badge status-green">Active</span></td>
-										<td>3rd</td>
-									</tr>
+									
 								</tbody>
 							</table>
 						</div>
@@ -721,6 +700,51 @@
     <script src="emergency/assets/js/moment.min.js"></script>
     <script src="emergency/assets/js/bootstrap-datetimepicker.min.js"></script>
     <script src="emergency/assets/js/app.js"></script>
+
+    <script>
+        async function endAmbulanceRequest(requestID) {
+            try {
+                const response = await fetch(`api/end_ambulance_request/${requestID}`);
+                if (response.ok) {
+                    location.reload(); // Reload the page upon successful completion
+                } else {
+                    console.error('Error:', response.status);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('api/emergency_call_details')
+            .then(response => response.json())
+            .then(data => {
+                var tableBody = document.getElementById('request-table');
+
+                data.forEach(function(rowData) {
+                    var dispatchTime = new Date(rowData.DispatchTime).toLocaleString();
+                    var ReturnTime = new Date(rowData.ReturnTime).toLocaleString();
+
+                    var row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${rowData.RequestID}</td>
+                        <td>${rowData.CallerName}</td>
+                        <td>${rowData.ContactNumber}</td>
+                        <td>${rowData.Description}</td>
+                        <td>${rowData.Location}</td>
+                        <td>${dispatchTime}</td>
+                        <td>${rowData.Model} ${rowData.NumberPlate}</td>
+                        <td>${rowData.ReturnTime ? '' : '<span class="custom-badge status-green">Active</span>'}</td>
+                        <td>${rowData.ReturnTime ? '' : `<button class="btn btn-primary" onclick="endAmbulanceRequest(${rowData.RequestID})">Cancel</button>`}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+        });
+    </script>
 </body>
 
 

@@ -214,18 +214,12 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-8 offset-lg-2">
-                        <form>
+                        <form method="POST">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-										<label>Emergency ID</label>
-										<input class="form-control" type="text" value="EMR-1" readonly="">
-									</div>
-                                </div>
                                 <div class="col-md-6">
 									<div class="form-group">
 										<label>Caller Name</label>
-										<input class="form-control" type="text">
+										<input name="name" class="form-control" type="text" required>
 									</div>
                                 </div>
                             </div>
@@ -233,31 +227,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Contact No</label>
-										<input class="form-control" type="number">  
+										<input name="contact" class="form-control" pattern="[0-9]{4}-[0-9]{7}" type="text" required>  
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Location</label>
-                                        <input class="form-control" type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Date</label>
-                                        <div class="cal-icon">
-                                            <input type="text" class="form-control datetimepicker">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Time</label>
-                                        <div class="time-icon">
-                                            <input type="text" class="form-control" id="datetimepicker3">
-                                        </div>
+                                        <input name="location" class="form-control" type="text" required>
                                     </div>
                                 </div>
                             </div>
@@ -266,39 +242,14 @@
                             </div>
                             <div class="form-group">
                                 <label>Description</label>
-                                <textarea cols="30" rows="4" class="form-control"></textarea>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Ambulance</label>
-                                   				<select class="form-control select">
-													<option>1st</option>
-													<option>2nd</option>
-                                                    <option>3rd</option>
-												</select>
-                                </div>
+                                <textarea name="description" cols="30" rows="4" class="form-control" ></textarea>
                             </div>
                             
-                            <div class="form-group ">
-                                <label class="display-block">Status</label>
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="radio" name="status" id="product_active" value="option1" checked>
-									<label class="form-check-label" for="product_active">
-									Active
-									</label>
-								</div>
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="radio" name="status" id="product_inactive" value="option2">
-									<label class="form-check-label" for="product_inactive">
-									Inactive
-									</label>
-								</div>
-                                
-                            </div>
+                            
                             
                             
                             <div class="m-t-20 text-center">
-                                <button class="btn btn-primary submit-btn">Add Detail</button>
+                                <input type="submit" class="btn btn-primary submit-btn" value="Submit">
                             </div>
                         </form>
                     </div>

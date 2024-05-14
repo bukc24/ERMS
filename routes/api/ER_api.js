@@ -39,7 +39,7 @@ router.route('/patients_not_in_ER').get(jwt_auth,async (req,res)=>{
 
 //searching patients
 router.route('/patients_in_ER/:q').get(jwt_auth,async (req,res)=>{
-    //FRONTEND: fetch('api/patients_in_ER').then(response=>response.json()).then(data=>{console.log(data)})
+    //FRONTEND: fetch('api/patients_in_ER/ANY_QUERY').then(response=>response.json()).then(data=>{console.log(data)})
     const q = req.params.q;
     query = `Select * from GetPatientsInER() 
     where patientid=? or PatientName like '%'+?+'%' or address like '%'+?+'%';`//patients in ER function
@@ -55,7 +55,7 @@ router.route('/patients_in_ER/:q').get(jwt_auth,async (req,res)=>{
 })
 
 router.route('/patients_not_in_ER/:q').get(jwt_auth,async (req,res)=>{
-    //FRONTEND: fetch('api/patients_not_in_ER').then(response=>response.json()).then(data=>{console.log(data)})
+    //FRONTEND: fetch('api/patients_not_in_ER/ANY_QUERY').then(response=>response.json()).then(data=>{console.log(data)})
     const q = req.params.q;
     const query = `Select * from GetPatientsNotInER() 
     where patientid=? or PatientName like '%'+?+'%' or address like '%'+?+'%';`//patients in ER function
@@ -106,11 +106,29 @@ router.route('/patients_count_triage').get(jwt_auth,async (req,res)=>{
     }
 })
 
+//getting doctors
+router.route('/doctors_in_ER').get(jwt_auth,async (req,res)=>{
+    //FRONTEND: fetch('api/patients_count_triage').then(response=>response.json()).then(data=>{console.log(data)})
+
+    query = `SELECT * FROM dbo.GetDoctorsInER();`//patients in ER function
+
+
+    try {
+        const result = await executeQuery(query)
+        console.log(result)
+        res.json(result)
+    }
+    catch(error){
+        res.status(500).json({error:"Internal Server Error"})
+    }
+})
+
+//doctors count
 
 
 //emergency call
 router.route('/available_ambulances').get(jwt_auth,async (req,res)=>{
-    //FRONTEND: fetch('api/patients_count_triage').then(response=>response.json()).then(data=>{console.log(data)})
+    //FRONTEND: fetch('api/available_ambulances').then(response=>response.json()).then(data=>{console.log(data)})
 
     query = `SELECT * FROM dbo.GetAvailableAmbulances();`//patients in ER function
 
@@ -124,6 +142,42 @@ router.route('/available_ambulances').get(jwt_auth,async (req,res)=>{
         res.status(500).json({error:"Internal Server Error"})
     }
 })
+
+router.route('/emergency_call_details').get(jwt_auth,async (req,res)=>{
+    //FRONTEND: fetch('api/available_ambulances').then(response=>response.json()).then(data=>{console.log(data)})
+
+    query = `SELECT * FROM dbo.GetEmergencyCallDetails() ORDER BY DispatchTime DESC;`//patients in ER function
+
+
+    try {
+        const result = await executeQuery(query)
+        console.log(result)
+        res.json(result)
+    }
+    catch(error){
+        res.status(500).json({error:"Internal Server Error"})
+    }
+})
+
+
+router.route('/end_ambulance_request/:requestID').get(jwt_auth,async (req,res)=>{
+    //FRONTEND: fetch('api/available_ambulances').then(response=>response.json()).then(data=>{console.log(data)})
+    const requestID = req.params.requestID;
+
+    query = `EXEC [dbo].[EndAmbulanceRequest] @RequestID = ?;`//patients in ER function
+    const parameters=[requestID]
+
+    try {
+        const result = await executeParameterizedQuery(query,parameters)
+        console.log(result)
+        res.json(result)
+    }
+    catch(error){
+        res.status(500).json({error:"Internal Server Error"})
+    }
+})
+
+
 
 
 
