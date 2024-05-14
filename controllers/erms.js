@@ -7,6 +7,10 @@ const jwt_auth = require('../middleware/jwt_auth')
 
 
 
+const base = (req,res)=>{
+  res.redirect('/dashboard')
+}
+
 
 const index = (req,res)=>{
   //TO DO: LIST NUMBER OF PATIENTS IN ER, NUMBER OF DOCTORS IN ER,
@@ -115,18 +119,22 @@ POST: CREATE AN ENTRY IN Patients; REDIRECT TO PREFILLED ADMIT FORM WITH PATIENT
     Database-Exec InsertPatient (@patientName, @dob, @gender, @contact, @address, @email, @password)
 */
 const registerView = (req,res)=>{
-  
+  res.sendFile(path.join(__dirname,'..','public','emergency','add-patient.html'));
 }
 
 const register = (req,res)=>{
-  const patientID = req.body.patientID;
-    const otherData = req.body.otherData;
+  const name = req.body.name
+  const dob = req.body.dob
+  const contact = req.body.contact
+  const gender = req.body.gender
+  const address = req.body.address
+  const email = req.body.email
+  const password = req.body.password
 
     // Create an entry in the PatientsInER array (simulating database)
     
-
     // Redirect to the detail page of the admitted patient
-    res.redirect(`/patient/${patientID}`);
+    res.redirect(`/`);
 }
 
 
@@ -195,6 +203,7 @@ const pageDoesNotExist =  (req, res) => {
 }
 
 module.exports ={
+    base,
     index,
     login,
     loginView,
@@ -204,5 +213,7 @@ module.exports ={
     emergency,
     emergencyRecordView,
     emergencyRecord,
+    registerView,
+    register,
     pageDoesNotExist
 }

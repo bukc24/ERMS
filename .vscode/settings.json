@@ -1,5 +1,6 @@
 {
     "dataworkspace.excludedProjects": [
         "mssql/mssql.sqlproj"
-    ]
+    ],
+    "liveServer.settings.port": 5501
 }
