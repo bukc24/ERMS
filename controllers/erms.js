@@ -99,6 +99,7 @@ POST: CREATE AN ENTRY IN PatientsInER ; REDIRECT TO THAT PATIENTS DETAIL PAGE
 */
 const admitView = (req,res) =>{
   //display form page
+  res.sendFile(path.join(__dirname,'..','public','emergency','index-2.html'));
 }
 
 const admit = (req,res)=>{
@@ -122,19 +123,40 @@ const registerView = (req,res)=>{
   res.sendFile(path.join(__dirname,'..','public','emergency','add-patient.html'));
 }
 
-const register = (req,res)=>{
+const register = async(req,res)=>{
   const name = req.body.name
   const dob = req.body.dob
   const contact = req.body.contact
   const gender = req.body.gender
   const address = req.body.address
-  const email = req.body.email
-  const password = req.body.password
+  const email = req.body.email === undefined ? '' : req.body.email;
+  const password = req.body.password === undefined ? '' : req.body.password;
 
-    // Create an entry in the PatientsInER array (simulating database)
-    
-    // Redirect to the detail page of the admitted patient
-    res.redirect(`/`);
+  // Create an entry in database
+  let sqlQuery;
+  let parameters;
+  if (email === '' && password ===''){
+    sqlQuery = `EXEC InsertPatient ?,?,?,?,?,NULL,NULL`;
+    parameters = [name,dob,gender,contact,address]
+  }
+  else{
+    sqlQuery = `EXEC InsertPatient ?,?,?,?,?,?,?;`;
+    parameters = [name,dob,gender,contact,address,email,password]
+  }
+  console.log(parameters)
+      try {
+        const result=await executeParameterizedQuery(sqlQuery,parameters)
+        console.log(result[0].Column0)
+        res.status(200)
+        //redirect to patient admit page
+        res.redirect("/admit/"+result[0].Column0)
+       
+      } catch (err) {
+        console.error('Error in registering patient', err);
+        res.status(500).send(err);
+      }
+  
+  
 }
 
 
@@ -215,5 +237,7 @@ module.exports ={
     emergencyRecord,
     registerView,
     register,
+    admitView,
+    admit,
     pageDoesNotExist
 }

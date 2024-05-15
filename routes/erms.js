@@ -22,6 +22,8 @@ const {
     emergencyRecord,
     registerView,
     register,
+    admitView,
+    admit,
     pageDoesNotExist
 } = require("../controllers/erms")
 
@@ -36,7 +38,7 @@ router.route('/logout').get(logout)
 router.route('/emergency_call').get(jwt_auth,emergency)
 router.route('/emergency_call/record').get(jwt_auth,emergencyRecordView).post(jwt_auth,emergencyRecord)
 router.route('/register').get(jwt_auth,registerView).post(jwt_auth,register)
-//router.route('/admit').get(admitView).post(admit)
+router.route('/admit/:patientID').get(admitView).post(admit)
 // router.route('/patient/:patientID').get((req,res)=>{res.send(req.params)})
 // router.route('/patient/:patientID/lab')
 // router.route('/patient/:patientID/medicine')
