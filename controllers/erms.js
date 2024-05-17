@@ -97,20 +97,45 @@ const logout = (req,res)=>{
 GET: A FORM WHERE PATIENT ID IS ENTERED ALONG WITH OTHER DATA FOR ADMITTED
 POST: CREATE AN ENTRY IN PatientsInER ; REDIRECT TO THAT PATIENTS DETAIL PAGE
 */
+const admitPre = (req,res) =>{
+  //display form page
+  res.sendFile(path.join(__dirname,'..','public','emergency','patient-admit.html'));
+} 
+
 const admitView = (req,res) =>{
   //display form page
-  res.sendFile(path.join(__dirname,'..','public','emergency','index-2.html'));
+  res.sendFile(path.join(__dirname,'..','public','emergency','patient-admit-form.html'));
 }
 
-const admit = (req,res)=>{
-  const patientID = req.body.patientID;
-    const otherData = req.body.otherData;
+const admit = async (req,res)=>{
+  const patientID = req.body.id
+  const triage = req.body.triage
+  const requestID = req.body.request
+  const doctorID = req.body.doctor
+  const description = req.body.description
 
-    // Create an entry in the PatientsInER array (simulating database)
-    
+  // sql query
+  const sqlQuery = `EXEC AddPatientToER 
+  @PatientID = ?,
+  @RequestID = ?,
+  @Status = ?,
+  @Triage = ?,
+  @DoctorID = ?,
+  @Description = ?;`
 
-    // Redirect to the detail page of the admitted patient
-    res.redirect(`/patient/${patientID}`);
+  parameters = [patientID,requestID,'Admitted',triage,doctorID,description]
+
+  try {
+    const result=await executeParameterizedQuery(sqlQuery,parameters)
+    res.status(200)
+    //redirect to patient details page
+    res.redirect('/')
+   
+  } catch (err) {
+    console.error('Error in registering patient', err);
+    res.status(500).send(err);
+  }
+ 
 }
 
 //PATIENT REGISTER
@@ -143,7 +168,6 @@ const register = async(req,res)=>{
     sqlQuery = `EXEC InsertPatient ?,?,?,?,?,?,?;`;
     parameters = [name,dob,gender,contact,address,email,password]
   }
-  console.log(parameters)
       try {
         const result=await executeParameterizedQuery(sqlQuery,parameters)
         console.log(result[0].Column0)
@@ -237,6 +261,7 @@ module.exports ={
     emergencyRecord,
     registerView,
     register,
+    admitPre,
     admitView,
     admit,
     pageDoesNotExist

@@ -42,8 +42,8 @@ router.route('/patients_in_ER/:q').get(jwt_auth,async (req,res)=>{
     //FRONTEND: fetch('api/patients_in_ER/ANY_QUERY').then(response=>response.json()).then(data=>{console.log(data)})
     const q = req.params.q;
     query = `Select * from GetPatientsInER() 
-    where patientid=? or PatientName like '%'+?+'%' or address like '%'+?+'%';`//patients in ER function
-    const parameters = [q,q,q];
+    where patientid=? or PatientName like '%'+?+'%' or address like '%'+?+'%' or contact like ?+'%';`//patients in ER function
+    const parameters = [q,q,q,q];
     try {
         const result = await executeParameterizedQuery(query,parameters)
         console.log(result)
@@ -58,8 +58,8 @@ router.route('/patients_not_in_ER/:q').get(jwt_auth,async (req,res)=>{
     //FRONTEND: fetch('api/patients_not_in_ER/ANY_QUERY').then(response=>response.json()).then(data=>{console.log(data)})
     const q = req.params.q;
     const query = `Select * from GetPatientsNotInER() 
-    where patientid=? or PatientName like '%'+?+'%' or address like '%'+?+'%';`//patients in ER function
-    const parameters = [q,q,q];
+    where patientid=? or PatientName like '%'+?+'%' or address like '%'+?+'%'  or contact like ?+'%';`//patients in ER function
+    const parameters = [q,q,q,q];
 
     try {
         const result = await executeParameterizedQuery(query,parameters)
@@ -71,6 +71,22 @@ router.route('/patients_not_in_ER/:q').get(jwt_auth,async (req,res)=>{
     }
 })
 
+router.route('/patients_not_in_ER_id/:q').get(jwt_auth,async (req,res)=>{
+    //FRONTEND: fetch('api/patients_not_in_ER_id/ANY_QUERY').then(response=>response.json()).then(data=>{console.log(data)})
+    const q = req.params.q;
+    const query = `Select * from GetPatientsNotInER() 
+    where patientid=?;`//patients in ER function
+    const parameters = [q];
+
+    try {
+        const result = await executeParameterizedQuery(query,parameters)
+        console.log(result)
+        res.json(result)
+    }
+    catch(error){
+        res.status(500).json({error:"Internal Server Error"})
+    }
+})
 
 //patients count
 router.route('/patients_count').get(jwt_auth,async (req,res)=>{
@@ -108,7 +124,7 @@ router.route('/patients_count_triage').get(jwt_auth,async (req,res)=>{
 
 //getting doctors
 router.route('/doctors_in_ER').get(jwt_auth,async (req,res)=>{
-    //FRONTEND: fetch('api/patients_count_triage').then(response=>response.json()).then(data=>{console.log(data)})
+    //FRONTEND: fetch('api/doctors_in_ER').then(response=>response.json()).then(data=>{console.log(data)})
 
     query = `SELECT * FROM dbo.GetDoctorsInER();`//patients in ER function
 
@@ -144,7 +160,7 @@ router.route('/available_ambulances').get(jwt_auth,async (req,res)=>{
 })
 
 router.route('/emergency_call_details').get(jwt_auth,async (req,res)=>{
-    //FRONTEND: fetch('api/available_ambulances').then(response=>response.json()).then(data=>{console.log(data)})
+    //FRONTEND: fetch('api/emergency_call_details').then(response=>response.json()).then(data=>{console.log(data)})
 
     query = `SELECT * FROM dbo.GetEmergencyCallDetails() ORDER BY DispatchTime DESC;`//patients in ER function
 
@@ -159,6 +175,21 @@ router.route('/emergency_call_details').get(jwt_auth,async (req,res)=>{
     }
 })
 
+router.route('/emergency_call_details_active').get(jwt_auth,async (req,res)=>{
+    //FRONTEND: fetch('api/emergency_call_details_active').then(response=>response.json()).then(data=>{console.log(data)})
+
+    query = `SELECT * FROM dbo.GetEmergencyCallDetails() WHERE  ReturnTime is Null ORDER BY DispatchTime DESC;`//patients in ER function
+
+
+    try {
+        const result = await executeQuery(query)
+        console.log(result)
+        res.json(result)
+    }
+    catch(error){
+        res.status(500).json({error:"Internal Server Error"})
+    }
+})
 
 router.route('/end_ambulance_request/:requestID').get(jwt_auth,async (req,res)=>{
     //FRONTEND: fetch('api/available_ambulances').then(response=>response.json()).then(data=>{console.log(data)})
@@ -180,13 +211,12 @@ router.route('/end_ambulance_request/:requestID').get(jwt_auth,async (req,res)=>
 
 
 
-
 //patient history
 router.route('/patient_history/:patientID').get(jwt_auth,async (req,res)=>{
     
     //FRONTEND: fetch('api/patient_history/:patientID').then(response=>response.json()).then(data=>{console.log(data)})
     const patientID = req.params.patientID;
-    query = `select * from GetPatientMedicalHistory(?);;`//patients in ER function
+    query = `select * from GetPatientMedicalHistory(?);`//patients in ER function
     const parameters = [patientID];
 
     try {
