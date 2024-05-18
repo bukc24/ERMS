@@ -4921,3 +4921,15 @@ blockquote p {
 .triage-yellow { background-color: rgba(255, 215, 0, 0.5); }
 .triage-green { background-color: rgba(144, 238, 144, 0.5); }
 
+.chart-container {
+	width: 100%;
+	position: relative;
+	aspect-ratio: 605/379;
+  }
+  .chart-content {
+	position: absolute;
+	top: 40px; /* Adjust this value if necessary to provide space for the title */
+	
+	width: 90%;
+	height: calc(100% - 40px); /* Subtract the top offset to maintain the aspect ratio */
+  }

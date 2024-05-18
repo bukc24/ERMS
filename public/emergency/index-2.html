@@ -17,7 +17,7 @@
 		<script src="emergency/assets/js/html5shiv.min.js"></script>
 		<script src="emergency/assets/js/respond.min.js"></script>
 	<![endif]-->
-    
+
 </head>
 
 <body>
@@ -172,12 +172,13 @@
 				<div class="row">
 					<div class="col-12 col-md-6 col-lg-6 col-xl-6">
 						<div class="card">
-							<div class="card-body">
+							<div class="card-body chart-container">
 								<div class="chart-title">
 									<h4>Patient Total</h4>
 									<span class="float-right"><i class="fa fa-caret-up" aria-hidden="true"></i> 15% Higher than Last Month</span>
 								</div>	
-								<canvas id="linegraph"></canvas>
+                                <center><div id="piechart" class="chart-content"></div></center>
+								
 							</div>
 						</div>
 					</div>
@@ -460,10 +461,16 @@
     <script src="emergency/assets/js/Chart.bundle.js"></script>
     <script src="emergency/assets/js/chart.js"></script>
     <script src="emergency/assets/js/app.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Load the Google Charts library
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+
             fetchAndDisplayDoctors();
             fetchAndDisplayPatients(); 
+            fetchDataAndDrawChart('api/patients_count_triage');
         });
 
         function fetchAndDisplayDoctors() {
@@ -536,6 +543,43 @@
                 })
                 .catch(error => console.error('Error fetching data:', error));
         }
+
+        // Define the function to fetch data and draw the chart
+      function fetchDataAndDrawChart(apiUrl) {
+        // Fetch the data from the API
+        fetch(apiUrl)
+          .then(response => response.json())
+          .then(data => {
+            // Data processing
+            const chartData = [['Triage', 'NumberOfPatients']];
+            data.forEach(item => {
+              chartData.push([item.Triage, item.NumberOfPatients]);
+            });
+
+            // Callback to draw the chart after the library is loaded
+            google.charts.setOnLoadCallback(() => drawChart(chartData));
+          });
+      }
+
+      // Function to draw the chart
+      function drawChart(chartData) {
+        const data = google.visualization.arrayToDataTable(chartData);
+
+        // Set custom colors for each triage category
+        // Set custom colors for each triage category
+        const options = {
+            colors: ['#a8e6a8', '#ff9999', '#ffe066', '#b3b3b3'], // Slightly more translucent-looking colors
+            slices: {
+              0: { color: '#a8e6a8' }, // Green
+              1: { color: '#ff9999' }, // Red
+              2: { color: '#ffe066' }, // Yellow
+              3: { color: '#b3b3b3' }  // Gray (instead of black)
+            }
+          };
+        const chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
     </script>
 
 </body>
