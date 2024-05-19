@@ -239,6 +239,9 @@ POST: Submit form and redirect to patient page
 /*
 GET: SHOW PATIENT DETAILS, LIKE 
 */
+const patientDetailsView = (req,res)=>{
+  res.sendFile(path.join(__dirname,'..','public','emergency','patient-details.html'));
+}
 
 
 
@@ -264,5 +267,6 @@ module.exports ={
     admitPre,
     admitView,
     admit,
+    patientDetailsView,
     pageDoesNotExist
 }

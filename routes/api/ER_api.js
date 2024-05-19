@@ -42,8 +42,8 @@ router.route('/patients_in_ER/:q').get(jwt_auth,async (req,res)=>{
     //FRONTEND: fetch('api/patients_in_ER/ANY_QUERY').then(response=>response.json()).then(data=>{console.log(data)})
     const q = req.params.q;
     query = `Select * from GetPatientsInER() 
-    where patientid=? or PatientName like '%'+?+'%' or address like '%'+?+'%' or contact like ?+'%';`//patients in ER function
-    const parameters = [q,q,q,q];
+    where patientid=?;`//patients in ER function
+    const parameters = [q];
     try {
         const result = await executeParameterizedQuery(query,parameters)
         console.log(result)

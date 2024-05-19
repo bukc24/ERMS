@@ -2,22 +2,22 @@
 <html lang="en">
 
 
-<!-- add-patient24:06-->
+<!-- index22:59-->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <base href="/">
     <link rel="shortcut icon" type="image/x-icon" href="emergency/assets/img/favicon.ico">
     <title>Preclinic - Medical & Hospital - Bootstrap 4 Admin Template</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="emergency/assets/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="emergency/assets/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="emergency/assets/css/select2.min.css">
-    <link rel="stylesheet" type="text/css" href="emergency/assets/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" type="text/css" href="emergency/assets/css/style.css">
     <!--[if lt IE 9]>
 		<script src="emergency/assets/js/html5shiv.min.js"></script>
 		<script src="emergency/assets/js/respond.min.js"></script>
 	<![endif]-->
+
 </head>
 
 <body>
@@ -63,7 +63,7 @@
                 <div id="sidebar-menu" class="sidebar-menu">
                     <ul>
                         <li class="menu-title">Main</li>
-                        <li>
+                        <li class="active">
                             <a href="/dashboard"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
                         </li>
 						<li>
@@ -72,7 +72,7 @@
                         <li>
                             <a href="/register"><i class="fa fa-wheelchair"></i> <span>Patient Register</span></a>
                         </li>
-                        <li class="active">
+                        <li>
                             <a href="/admit"><i class="fa fa-calendar"></i> <span>Patient Admit</span></a>
                         </li>
                         
@@ -133,16 +133,16 @@
             <div class="content">
                 <div class="row">
                     <div class="col-lg-8 offset-lg-2">
-                        <h4 class="page-title">Admit Patient</h4>
+                        <h4 class="page-title">Patient Details</h4>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-8 offset-lg-2">
-                        <form method="POST">
+                        <form>
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Patient ID<span class="text-danger">*</span></label>
+                                        <label>Patient ID</label>
                                         <input id='id' name="id" class="form-control" type="text" readonly>
                                     </div>
                                 </div>
@@ -151,23 +151,23 @@
                                 
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Patient Name <span class="text-danger">*</span></label>
-                                        <input id="name" name="name" class="form-control" type="text" disabled>
+                                        <label>Patient Name </label>
+                                        <input id="name" name="name" class="form-control" type="text" readonly>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Date of Birth <span class="text-danger">*</span></label>
+                                        <label>Date of Birth </label>
                                         <div class="cal-icon">
-                                            <input id="dob" name="dob" type="text" class="form-control datetimepicker" disabled>
+                                            <input id="dob" name="dob" type="text" class="form-control datetimepicker" readonly>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Contact No. <span class="text-danger">*</span></label>
-                                        <input id='contact' name="contact" class="form-control" type="text" disabled>
+                                        <label>Contact No. </label>
+                                        <input id='contact' name="contact" class="form-control" type="text" readonly>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -190,7 +190,7 @@
 										<div class="col-sm-12">
 											<div class="form-group">
 												<label>Address</label>
-												<input id="address" name="address" type="text" class="form-control " disabled>
+												<input id="address" name="address" type="text" class="form-control " readonly>
 											</div>
 										</div>											
 									</div>
@@ -198,8 +198,8 @@
                                 
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Triage <span class="text-danger">*</span></label>
-                                        <select id='triage' name="triage" class="form-control">
+                                        <label>Triage </label>
+                                        <select id='triage' name="triage" class="form-control" disabled>
                                             <option value="">Select a triage level</option>
                                             <option value="Red">Red - Immediate</option>
                                             <option value="Yellow">Yellow - Urgent</option>
@@ -208,39 +208,30 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Request</label>
-                                        <select id='request' name="request" class="form-control">
-                                            <!-- Options will be populated here dynamically -->
-                                        </select>
-                                    </div>
-                                </div>
+                               
                                 
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Doctors</label>
-                                        <select id='doctor' name="doctor" class="form-control">
-                                            <!-- Options will be populated here dynamically -->
-                                            <option value="">Select Doctor</option>
-                                        </select>
+                                        <label>Doctor Assigned</label>
+                                        <input id='doctor' name="doctor" class="form-control" type="text" readonly>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label>Description <span class="text-danger">*</span></label>
-                                        <input id='description' name="description" class="form-control" type="text-area" >
+                                        <label>Description </label>
+                                        <input id='description' name="description" class="form-control" type="text-area" readonly>
                                     </div>
                                 </div>
                             </div>
-                            <div class="m-t-20 text-center">
-                                <button class="btn btn-primary submit-btn">Admit Patient</button>
-                            </div>
+                            
                         </form>
                     </div>
                 </div>
+
             </div>
-			
+
+            
+            
         </div>
     </div>
     <div class="sidebar-overlay" data-reff=""></div>
@@ -248,96 +239,59 @@
 	<script src="emergency/assets/js/popper.min.js"></script>
     <script src="emergency/assets/js/bootstrap.min.js"></script>
     <script src="emergency/assets/js/jquery.slimscroll.js"></script>
-    <script src="emergency/assets/js/select2.min.js"></script>
-	<script src="emergency/assets/js/moment.min.js"></script>
-	<script src="emergency/assets/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="emergency/assets/js/Chart.bundle.js"></script>
+    <script src="emergency/assets/js/chart.js"></script>
     <script src="emergency/assets/js/app.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
-        function populatePatientData() {
-            // Get the patient ID from the URL path
-            const pathSegments = window.location.pathname.split('/');
-            const patientId = pathSegments[pathSegments.length - 1]; // Get the last segment of the path
-    
-            if (patientId) {
-                // Fetch data using the patient ID
-                fetch(`api/patients_not_in_ER_id/${patientId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        data = data[0];
-                        console.log(data);
-                        document.getElementById('id').value = data.PatientID;
-                        document.getElementById('name').value = data.PatientName;
-                        document.getElementById('dob').value = new Date(data.DOB).toLocaleDateString();
-                        document.getElementById('contact').value = data.Contact;
-                        document.getElementById('address').value = data.Address;
-    
-                        if (data.Gender === 'M') {
-                            document.getElementById('gender-male').checked = true;
-                        } else if (data.Gender === 'F') {
-                            document.getElementById('gender-female').checked = true;
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching patient data:', error);
-                    });
-            } else {
-                console.error('Patient ID is missing in the URL');
+        document.addEventListener('DOMContentLoaded', () => {
+            // Function to extract the patient ID from the URL path
+            function getPatientIdFromUrl() {
+                const path = window.location.pathname;
+                const pathSegments = path.split('/');
+                return pathSegments[pathSegments.length - 1]; // Get the last segment which is the patient ID
             }
-        }
-        
 
-        function populateDoctorsSelect() {
-            fetch('api/doctors_in_ER')
-                .then(response => response.json())
+            // Extract the patient ID
+            const patientId = getPatientIdFromUrl();
+            const apiURL = `api/patients_in_ER/${patientId}`;
+
+            // Fetch data from the API
+            fetch(apiURL)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    const selectElement = document.getElementById('doctor');
-                    data.forEach(doctor => {
-                        const option = document.createElement('option');
-                        option.value = doctor.DoctorID;
-                        option.textContent = `${doctor.EmpName} - ${doctor.Specialization}`;
-                        selectElement.appendChild(option);
-                    });
+                    //getting data entry
+                    data=data[0]
+
+                    // Populate the form fields with the data
+                    document.getElementById('id').value = data.PatientID;
+                    document.getElementById('name').value = data.PatientName;
+                    document.getElementById('dob').value = new Date(data.DOB).toLocaleDateString();
+                    document.getElementById('contact').value = data.Contact;
+                    document.getElementById('address').value = data.Address;
+                    document.getElementById('triage').value = data.Triage;
+                    document.getElementById('doctor').value = data.DoctorName;
+                    document.getElementById('description').value = data.Description || '';
+
+                    // Set gender radio button
+                    if (data.Gender === 'M') {
+                        document.getElementById('gender-male').checked = true;
+                    } else if (data.Gender === 'F') {
+                        document.getElementById('gender-female').checked = true;
+                    }
                 })
                 .catch(error => {
-                    console.error('Error fetching doctor data:', error);
+                    console.error('There was a problem with the fetch operation:', error);
                 });
-        }
-
-        function populateRequestSelect() {
-            fetch('api/emergency_call_details_active')
-                .then(response => response.json())
-                .then(data => {
-                    const selectElement = document.getElementById('request');
-    
-                    // Create and append the empty default option
-                    const defaultOption = document.createElement('option');
-                    defaultOption.value = '';
-                    defaultOption.textContent = 'Select a request';
-                    selectElement.appendChild(defaultOption);
-    
-                    // Populate the select element with options from the fetched data
-                    data.forEach(request => {
-                        const option = document.createElement('option');
-                        option.value = request.RequestID;
-                        option.textContent = `${request.CallerName} - ${request.Description} - ${request.Location}`;
-                        selectElement.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching request data:', error);
-                });
-        }
-    
-
-        // Call the function to populate patient data
-        document.addEventListener('DOMContentLoaded', populatePatientData);
-        document.addEventListener('DOMContentLoaded', populateDoctorsSelect);
-        document.addEventListener('DOMContentLoaded', populateRequestSelect);
+        });
     </script>
-    
-        
 </body>
 
 
-<!-- add-patient24:07-->
+<!-- index22:59-->
 </html>
