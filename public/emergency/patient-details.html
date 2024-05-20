@@ -133,7 +133,23 @@
             <div class="content">
                 <div class="row">
                     <div class="col-lg-8 offset-lg-2">
+                        
                         <h4 class="page-title">Patient Details</h4>
+
+                        <div class="nav-item dropdown has-arrow float-right">
+                            <a href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown">
+                                <span>Actions</span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" data-toggle="modal" data-target="#medicalHistory" href="">View Diagnosis History</a>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#labTestHistory" href="">View Lab Test History</a>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#updateStatus" href="">Update Patient Status</a>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#labTestRequest" href="">Lab Test Request</a>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#medicineRequest" href="">Medicine Request</a>
+                            </div>
+                        </div>
+                        
+
                     </div>
                 </div>
                 <div class="row">
@@ -228,6 +244,142 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                        <div class="m-t-20 text-center">
+                            <button class="btn btn-danger">Discharge</button>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <!-- POPUPS-->
+
+                
+                <!-- Modal -->
+                <div class="modal fade" id="medicalHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Diagnosis History</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <table id="diagnosis-table" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Diagnosis</th>
+                                        <th>Clinical Notes</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Diagnosis items will be added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="labTestHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Lab Tests</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <table id="lab-test-table" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Test Name</th>
+                                        <th>Field Name</th>
+                                        <th>Normal Range</th>
+                                        <th>Result</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Lab test items will be added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="updateStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Update Status</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                        ...
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="labTestRequest" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Lab Test Request</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                        ...
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="medicineRequest" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Medicine Request</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                        ...
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
             </div>
 
             
@@ -245,17 +397,26 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Function to extract the patient ID from the URL path
-            function getPatientIdFromUrl() {
-                const path = window.location.pathname;
-                const pathSegments = path.split('/');
-                return pathSegments[pathSegments.length - 1]; // Get the last segment which is the patient ID
-            }
-
             // Extract the patient ID
             const patientId = getPatientIdFromUrl();
-            const apiURL = `api/patients_in_ER/${patientId}`;
 
+            populatePatientData(patientId);
+            fetchDiagnosisData(patientId);
+            fetchLabTestData(patientId);
+            
+        });
+
+
+        // Function to extract the patient ID from the URL path
+        function getPatientIdFromUrl() {
+            const path = window.location.pathname;
+            const pathSegments = path.split('/');
+            return pathSegments[pathSegments.length - 1]; // Get the last segment which is the patient ID
+        }
+
+
+        function populatePatientData(patientId){
+            const apiURL = `api/patients_in_ER/${patientId}`;
             // Fetch data from the API
             fetch(apiURL)
                 .then(response => {
@@ -288,7 +449,59 @@
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error);
                 });
-        });
+        }
+
+        function fetchDiagnosisData(patientId) {
+            const diagnosisApiURL = `api/patient_diagnosis_history/${patientId}`;
+            fetch(diagnosisApiURL)
+                .then(response => response.json())
+                .then(data => populateDiagnosisTable(data))
+                .catch(error => console.error('Error fetching diagnosis data:', error));
+        }
+        
+        function populateDiagnosisTable(diagnosisData) {
+            const diagnosisTableBody = document.getElementById('diagnosis-table').getElementsByTagName('tbody')[0];
+            diagnosisTableBody.innerHTML = ''; // Clear existing items
+            diagnosisData.forEach(diagnosis => {
+                const row = diagnosisTableBody.insertRow();
+                const dateCell = row.insertCell(0);
+                const diagnosisCell = row.insertCell(1);
+                const notesCell = row.insertCell(2);
+                const descriptionCell = row.insertCell(3);
+        
+                dateCell.textContent = new Date(diagnosis.Date).toLocaleDateString();
+                diagnosisCell.textContent = diagnosis.DiagnosisName;
+                notesCell.textContent = diagnosis.ClinicalNotes;
+                descriptionCell.textContent = diagnosis.Description;
+            });
+        }
+
+        function fetchLabTestData(patientId) {
+            const labTestApiURL = `api/patient_lab_history/${patientId}`;
+            fetch(labTestApiURL)
+                .then(response => response.json())
+                .then(data => populateLabTestTable(data))
+                .catch(error => console.error('Error fetching lab test data:', error));
+        }
+        
+        function populateLabTestTable(labTestData) {
+            const labTestTableBody = document.getElementById('lab-test-table').getElementsByTagName('tbody')[0];
+            labTestTableBody.innerHTML = ''; // Clear existing items
+            labTestData.forEach(test => {
+                const row = labTestTableBody.insertRow();
+                const dateCell = row.insertCell(0);
+                const testNameCell = row.insertCell(1);
+                const fieldNameCell = row.insertCell(2);
+                const normalRangeCell = row.insertCell(3);
+                const resultCell = row.insertCell(4);
+        
+                dateCell.textContent = new Date(test.timestamp).toLocaleDateString();
+                testNameCell.textContent = test.Testname;
+                fieldNameCell.textContent = test.FieldName;
+                normalRangeCell.textContent = test.NormalRange;
+                resultCell.textContent = test.FieldResult;
+            });
+        }
     </script>
 </body>
 

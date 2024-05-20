@@ -229,6 +229,48 @@ router.route('/patient_history/:patientID').get(jwt_auth,async (req,res)=>{
     }
 })
 
+
+
+//patient diagnosis history
+router.route('/patient_diagnosis_history/:patientID').get(jwt_auth,async (req,res)=>{
+    
+    //FRONTEND: fetch('/patient_diagnosis_history/:patientID').then(response=>response.json()).then(data=>{console.log(data)})
+    const patientID = req.params.patientID;
+    query = `EXEC GetPatientDiagnosis @PatientID = ?;`//patients in ER function
+    const parameters = [patientID];
+
+    try {
+        const result = await executeParameterizedQuery(query,parameters)
+        console.log(result)
+        res.json(result)
+    }
+    catch(error){
+        res.status(500).json({error:"Internal Server Error"})
+    }
+})
+
+
+//patient lab history
+router.route('/patient_lab_history/:patientID').get(jwt_auth,async (req,res)=>{
+    
+    //FRONTEND: fetch('/patient_lab_history/:patientID').then(response=>response.json()).then(data=>{console.log(data)})
+    const patientID = req.params.patientID;
+    query = `EXEC GetLabResults @PatientID = ?;`//patients in ER function
+    const parameters = [patientID];
+
+    try {
+        const result = await executeParameterizedQuery(query,parameters)
+        console.log(result)
+        res.json(result)
+    }
+    catch(error){
+        res.status(500).json({error:"Internal Server Error"})
+    }
+})
+
+
+
+
 //Discharge a patient
 router.route('/patient_discharge/:patientID').get(jwt_auth,async (req,res)=>{
     

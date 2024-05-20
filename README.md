@@ -21,3 +21,10 @@
 4. No special case to handle 0 ambulances available
 5. Registering a patient without admitting them is allowed
 6. Must move JWT key to .env
+
+
+## TODO
+
+1. Medicine request
+2. Lab request
+3. Patient Status Update
