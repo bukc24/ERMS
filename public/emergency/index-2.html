@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <base href="/">
     <link rel="shortcut icon" type="image/x-icon" href="emergency/assets/img/favicon.ico">
-    <title>Preclinic - Medical & Hospital - Bootstrap 4 Admin Template</title>
+    <title>Emergency Management</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="emergency/assets/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="emergency/assets/css/font-awesome.min.css">
@@ -76,55 +76,7 @@
                             <a href="/admit"><i class="fa fa-calendar"></i> <span>Patient Admit</span></a>
                         </li>
                         
-						<li class="submenu">
-							<a href="#"><i class="fa fa-user"></i> <span> Patient Details </span> <span class="menu-arrow"></span></a>
-							<ul style="display: none;">
-								<li><a href="edit-patient-details.html">Edit Patient Details </a></li>
-								<li><a href="patient-transfer.html">Patient Transfer</a></li>
-								<li><a href="patient-discharge.html">Patient Discharge</a></li>
-								<li><a href="patient-medical-history.html">Patient Medical History</a></li>
-                                <li><a href="medication-request.html">Medication Request</a></li>
-								<li><a href="lab-request.html">Lab request</a></li>
-							</ul>
-						</li>
-                        <li class="menu-title">Extras</li>
-                        <li class="submenu">
-                            <a href="#"><i class="fa fa-columns"></i> <span>Pages</span> <span class="menu-arrow"></span></a>
-                            <ul style="display: none;">
-                                <li><a href="login.html"> Login </a></li>
-                                <li><a href="register.html"> Register </a></li>
-                                <li><a href="forgot-password.html"> Forgot Password </a></li>
-                                <li><a href="change-password2.html"> Change Password </a></li>
-                                <li><a href="lock-screen.html"> Lock Screen </a></li>
-                                <li><a href="profile.html"> Profile </a></li>
-                                <li><a href="gallery.html"> Gallery </a></li>
-                                <li><a href="error-404.html">404 Error </a></li>
-                                <li><a href="error-500.html">500 Error </a></li>
-                                <li><a href="blank-page.html"> Blank Page </a></li>
-                            </ul>
-                        </li>
-                        <li class="submenu">
-                            <a href="javascript:void(0);"><i class="fa fa-share-alt"></i> <span>Multi Level</span> <span class="menu-arrow"></span></a>
-                            <ul style="display: none;">
-                                <li class="submenu">
-                                    <a href="javascript:void(0);"><span>Level 1</span> <span class="menu-arrow"></span></a>
-                                    <ul style="display: none;">
-                                        <li><a href="javascript:void(0);"><span>Level 2</span></a></li>
-                                        <li class="submenu">
-                                            <a href="javascript:void(0);"> <span> Level 2</span> <span class="menu-arrow"></span></a>
-                                            <ul style="display: none;">
-                                                <li><a href="javascript:void(0);">Level 3</a></li>
-                                                <li><a href="javascript:void(0);">Level 3</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="javascript:void(0);"><span>Level 2</span></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);"><span>Level 1</span></a>
-                                </li>
-                            </ul>
-                        </li>
+						
                     </ul>
                 </div>
             </div>
@@ -254,6 +206,8 @@
     <script src="emergency/assets/js/chart.js"></script>
     <script src="emergency/assets/js/app.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
+    <script src="https://mediafiles.botpress.cloud/641e1dd3-2a31-4d14-bb1e-59124e794f41/webchat/config.js" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Load the Google Charts library
@@ -263,6 +217,8 @@
             fetchAndDisplayDoctors();
             fetchAndDisplayPatients(); 
             fetchDataAndDrawChart('api/patients_count_triage');
+
+            
         });
 
         function fetchAndDisplayDoctors() {
@@ -311,10 +267,13 @@
                     //populating table
                     const tableBody = document.querySelector('.table tbody');
 
+
                     data.forEach(patient => {
                         const row = document.createElement('tr');
 
-                        
+                        //checking doctorName
+                        const doctorName = patient.DoctorName ? `Dr. ${patient.DoctorName}` : '-';
+
 
 
                         row.innerHTML = `
@@ -324,7 +283,7 @@
                             </td>
                             <td>
                                 <h5 class="time-title p-0">Appointed With</h5>
-                                <p>Dr. ${patient.DoctorName}</p>
+                                <p>${doctorName}</p>
                             </td>
                             <td>${patient.Status}</td>
                             
@@ -359,18 +318,29 @@
 
         // Set custom colors for each triage category
         // Set custom colors for each triage category
-        const options = {
-            colors: ['#a8e6a8', '#ff9999', '#ffe066', '#b3b3b3'], // Slightly more translucent-looking colors
-            slices: {
-              0: { color: '#a8e6a8' }, // Green
-              1: { color: '#ff9999' }, // Red
-              2: { color: '#ffe066' }, // Yellow
-              3: { color: '#b3b3b3' }  // Gray (instead of black)
-            }
+        const colorMapping = {
+            'Green': '#a8e6a8',
+            'Red': '#ff9999',
+            'Yellow': '#ffe066',
+            'Black': '#b3b3b3' // Assuming Gray for Black
           };
-        const chart = new google.visualization.PieChart(document.getElementById('piechart'));
+  
+          // Generate slices with colors based on the data
+          const slices = {};
+          chartData.slice(1).forEach((row, index) => {
+            slices[index] = { color: colorMapping[row[0]] };
+          });
+  
+          // Set custom colors for each triage category
+          options = {
+            title: '',
+            pieSliceText: 'label',
+            slices: slices,
+            legend: { position: 'bottom' }
+          };
+          chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
-        chart.draw(data, options);
+          chart.draw(data, options);
       }
     </script>
 

@@ -272,20 +272,80 @@ router.route('/patient_lab_history/:patientID').get(jwt_auth,async (req,res)=>{
 
 
 //Discharge a patient
-router.route('/patient_discharge/:patientID').get(jwt_auth,async (req,res)=>{
-    
+router.route('/patient_discharge/:patientID').post(jwt_auth, async (req, res) => {
     //FRONTEND: fetch('api/patient_discharge/:patientID').then(response=>response.json()).then(data=>{console.log(data)})
+
     const patientID = req.params.patientID;
-    query = `EXEC AddDischargedStatusToPatientInERHistory @PatientID = ?, @Description = 'Patient discharged after treatment.';`//patients in ER function
-    const parameters = [patientID];
+    const reason = req.body.reason;
+    const query = `EXEC AddDischargedStatusToPatientInERHistory @PatientID = ?, @Description = ?;`;
+    const parameters = [patientID, reason];
 
     try {
-        const result = await executeParameterizedQuery(query,parameters)
-        console.log(result)
-        res.json(result)
+        const result = await executeParameterizedQuery(query, parameters);
+        console.log(result);
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
+//Deceased patient
+router.route('/patient_deceased/:patientID').post(jwt_auth, async (req, res) => {
+    const patientID = req.params.patientID;
+    const reason = req.body.reason;
+    const query = `EXEC AddDeceasedStatusToPatientInERHistory @PatientID = ?, @Description = ?;`; // Assuming this stored procedure exists
+    const parameters = [patientID, reason];
+    console.log(query)
+    try {
+        const result = await executeParameterizedQuery(query, parameters);
+        console.log(result);
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
+
+
+//Update patient Status
+router.route('/patient_status_update/:patientID').post(jwt_auth,async (req,res)=>{
+    
+    //FRONTEND: fetch('api/patient_status_update/:patientID').then(response=>response.json()).then(data=>{console.log(data)})
+    const patientID = req.body.patientID;
+    const status = req.body.status;
+    const triage = req.body.triage;
+    const doctorID = req.body.doctor;
+    const description = req.body.description;
+    let query;
+    let parameters;
+    if(doctorID===''){
+        query = `EXEC [dbo].[UpdatePatientsInER] 
+        @PatientID = ?, 
+        @Status = ?, 
+        @Triage = ?, 
+        @Description = ?;`//patients in ER function
+        parameters = [patientID,status,triage,description];
+    }
+    else{
+        query = `EXEC [dbo].[UpdatePatientsInER] 
+        @PatientID = ?, 
+        @Status = ?, 
+        @Triage = ?, 
+        @DoctorID = ?, 
+        @Description = ?;`//patients in ER function
+        parameters = [patientID,status,triage,doctorID,description];
+    }
+    
+    console.log(parameters)
+    try {
+        const result = await executeParameterizedQuery(query,parameters);
+        
+        res.status(200).json({ message: "Patient status updated successfully" });
     }
     catch(error){
-        res.status(500).json({error:"Internal Server Error"})
+        res.status(500).json({error:"Internal Server Error"});
     }
 })
 

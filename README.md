@@ -27,4 +27,3 @@
 
 1. Medicine request
 2. Lab request
-3. Patient Status Update

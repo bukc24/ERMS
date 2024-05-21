@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <base href="/">
     <link rel="shortcut icon" type="image/x-icon" href="emergency/assets/img/favicon.ico">
-    <title>Preclinic - Medical & Hospital - Bootstrap 4 Admin Template</title>
+    <title>Emergency Management</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="emergency/assets/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="emergency/assets/css/font-awesome.min.css">
@@ -63,7 +63,7 @@
                 <div id="sidebar-menu" class="sidebar-menu">
                     <ul>
                         <li class="menu-title">Main</li>
-                        <li class="active">
+                        <li>
                             <a href="/dashboard"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
                         </li>
 						<li>
@@ -75,56 +75,7 @@
                         <li>
                             <a href="/admit"><i class="fa fa-calendar"></i> <span>Patient Admit</span></a>
                         </li>
-                        
-						<li class="submenu">
-							<a href="#"><i class="fa fa-user"></i> <span> Patient Details </span> <span class="menu-arrow"></span></a>
-							<ul style="display: none;">
-								<li><a href="edit-patient-details.html">Edit Patient Details </a></li>
-								<li><a href="patient-transfer.html">Patient Transfer</a></li>
-								<li><a href="patient-discharge.html">Patient Discharge</a></li>
-								<li><a href="patient-medical-history.html">Patient Medical History</a></li>
-                                <li><a href="medication-request.html">Medication Request</a></li>
-								<li><a href="lab-request.html">Lab request</a></li>
-							</ul>
-						</li>
-                        <li class="menu-title">Extras</li>
-                        <li class="submenu">
-                            <a href="#"><i class="fa fa-columns"></i> <span>Pages</span> <span class="menu-arrow"></span></a>
-                            <ul style="display: none;">
-                                <li><a href="login.html"> Login </a></li>
-                                <li><a href="register.html"> Register </a></li>
-                                <li><a href="forgot-password.html"> Forgot Password </a></li>
-                                <li><a href="change-password2.html"> Change Password </a></li>
-                                <li><a href="lock-screen.html"> Lock Screen </a></li>
-                                <li><a href="profile.html"> Profile </a></li>
-                                <li><a href="gallery.html"> Gallery </a></li>
-                                <li><a href="error-404.html">404 Error </a></li>
-                                <li><a href="error-500.html">500 Error </a></li>
-                                <li><a href="blank-page.html"> Blank Page </a></li>
-                            </ul>
-                        </li>
-                        <li class="submenu">
-                            <a href="javascript:void(0);"><i class="fa fa-share-alt"></i> <span>Multi Level</span> <span class="menu-arrow"></span></a>
-                            <ul style="display: none;">
-                                <li class="submenu">
-                                    <a href="javascript:void(0);"><span>Level 1</span> <span class="menu-arrow"></span></a>
-                                    <ul style="display: none;">
-                                        <li><a href="javascript:void(0);"><span>Level 2</span></a></li>
-                                        <li class="submenu">
-                                            <a href="javascript:void(0);"> <span> Level 2</span> <span class="menu-arrow"></span></a>
-                                            <ul style="display: none;">
-                                                <li><a href="javascript:void(0);">Level 3</a></li>
-                                                <li><a href="javascript:void(0);">Level 3</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="javascript:void(0);"><span>Level 2</span></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);"><span>Level 1</span></a>
-                                </li>
-                            </ul>
-                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -141,7 +92,8 @@
                                 <span>Actions</span>
                             </a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#medicalHistory" href="">View Diagnosis History</a>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#medicalHistory" href="">View Medical History</a>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#diagnosisHistory" href="">View Diagnosis History</a>
                                 <a class="dropdown-item" data-toggle="modal" data-target="#labTestHistory" href="">View Lab Test History</a>
                                 <a class="dropdown-item" data-toggle="modal" data-target="#updateStatus" href="">Update Patient Status</a>
                                 <a class="dropdown-item" data-toggle="modal" data-target="#labTestRequest" href="">Lab Test Request</a>
@@ -153,7 +105,9 @@
                     </div>
                 </div>
                 <div class="row">
+                    
                     <div class="col-lg-8 offset-lg-2">
+
                         <form>
                             <div class="row">
                                 <div class="col-sm-6">
@@ -245,20 +199,58 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-8 offset-lg-2">
+                    <div class="col-lg-5"></div>
+                    <div class="col-lg-1 mx-1">
                         <div class="m-t-20 text-center">
-                            <button class="btn btn-danger">Discharge</button>
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#dischargeModal">Discharge</button>
                         </div>
                     </div>
+                    <div class="col-lg-1 mx-1">
+                        <div class="m-t-20 text-center">
+                            <button class="btn btn-dark" data-toggle="modal" data-target="#deceasedModal">Deceased</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-5"></div>
                 </div>
+
                 
 
                 <!-- POPUPS-->
 
-                
-                <!-- Modal -->
-                <div class="modal fade" id="medicalHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
+                <!-- Modal --> 
+                <div class="modal fade bd-example-modal-lg" id="medicalHistory" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog  modal-dialog-centered modal-lg">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Diagnosis History</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+                                <table id="medical-history-table" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>TreatmentHistory</th>
+                                            <th>Allergies</th>
+                                            <th>PreviousSurgeries</th>
+                                            <th>FamilyHistory</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Diagnosis items will be added here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                      </div>
+                    </div>
+                  </div>    
+                <!-- Modal -->      
+                <div class="modal fade" id="diagnosisHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Diagnosis History</h5>
@@ -289,7 +281,7 @@
                 </div>
                 <!-- Modal -->
                 <div class="modal fade" id="labTestHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Lab Tests</h5>
@@ -330,12 +322,57 @@
                         </button>
                         </div>
                         <div class="modal-body">
-                        ...
+                            <form id='updateForm'>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Status </label>
+                                            <select id='statusUpdate' name="status" class="form-control">
+                                                <option value="">Select Status</option>
+                                                <option value="Admitted">Admitted</option>
+                                                <option value="In Treatment">In Treatment</option>
+                                                <option value="Undergoing Operation">Undergoing Operation</option>
+                                            </select>
+                                        </div>
+                                    </div>                                    
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Triage <span class="text-danger">*</span></label>
+                                            <select id='triageUpdate' name="triage" class="form-control">
+                                                <option value="">Select a triage level</option>
+                                                <option value="Red">Red - Immediate</option>
+                                                <option value="Yellow">Yellow - Urgent</option>
+                                                <option value="Green">Green - Non-Urgent</option>
+                                                <option value="Black">Black - Deceased</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Doctors</label>
+                                            <select id='doctorUpdate' name="doctor" class="form-control">
+                                                <!-- Options will be populated here dynamically -->
+                                                <option value="">Select Doctor</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Description </label>
+                                            <input id='descriptionUpdate' name="description" class="form-control" type="text-area" >
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <input type="submit" class="btn btn-primary" value="Save changes">
+                                    </div>
+                            </form>
                         </div>
-                        <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
+                        
                     </div>
                     </div>
                 </div>
@@ -380,6 +417,50 @@
                     </div>
                 </div>
 
+                <!-- Bootstrap Modal HTML -->
+                <div class="modal fade" id="dischargeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Discharging Patient</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <label for="dischargeReason">Reason for discharge:</label>
+                                <input type="text" id="dischargeReason" class="form-control">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="confirmDischarge">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bootstrap Modal for Deceased -->
+                <div class="modal fade" id="deceasedModal" tabindex="-1" role="dialog" aria-labelledby="deceasedModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deceasedModalLabel">Update Deceased Status</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <label for="deceasedReason">Reason for death:</label>
+                                <input type="text" id="deceasedReason" class="form-control">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="confirmDeceased">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             
@@ -403,7 +484,11 @@
             populatePatientData(patientId);
             fetchDiagnosisData(patientId);
             fetchLabTestData(patientId);
-            
+            fetchMedicalHistoryData(patientId);
+            populateDoctorsSelect();
+            updatePatientStatus(patientId);
+            confirmDischarge(patientId);
+            confirmDeceased(patientId);
         });
 
 
@@ -501,6 +586,137 @@
                 normalRangeCell.textContent = test.NormalRange;
                 resultCell.textContent = test.FieldResult;
             });
+        }
+
+        //medical history
+        function fetchMedicalHistoryData(patientId) {
+            const labTestApiURL = `api/patient_history/${patientId}`;
+            fetch(labTestApiURL)
+                .then(response => response.json())
+                .then(data => populateMedicalHistoryTable(data))
+                .catch(error => console.error('Error fetching lab test data:', error));
+        }
+        
+        function populateMedicalHistoryTable(medicalHistoryData) {
+            const medicalHistoryTableBody = document.getElementById('medical-history-table').getElementsByTagName('tbody')[0];
+            medicalHistoryTableBody.innerHTML = ''; // Clear existing items
+            medicalHistoryData.forEach(history => {
+                const row = medicalHistoryTableBody.insertRow();
+                const treatmentHistory = row.insertCell(0);
+                const allergies = row.insertCell(1);
+                const previousSurgeries = row.insertCell(2);
+                const familyHistory = row.insertCell(3);
+
+        
+                treatmentHistory.textContent = history.TreatmentHistory;
+                allergies.textContent = history.Allergies;
+                previousSurgeries.textContent = history.PreviousSurgeries;
+                familyHistory.textContent = history.FamilyHistory;
+
+            });
+
+            
+        }
+
+        //doctors update
+        function populateDoctorsSelect() {
+            fetch('api/doctors_in_ER')
+                .then(response => response.json())
+                .then(data => {
+                    const selectElement = document.getElementById('doctorUpdate');
+                    data.forEach(doctor => {
+                        const option = document.createElement('option');
+                        option.value = doctor.DoctorID;
+                        option.textContent = `${doctor.EmpName} - ${doctor.Specialization}`;
+                        selectElement.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching doctor data:', error);
+                });
+        }
+    
+        //update form
+        function updatePatientStatus(patientId) {
+            document.getElementById('updateForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+        
+                const patientID = patientId; // You may retrieve this dynamically from your page
+                const status = document.getElementById('statusUpdate').value;
+                const triage = document.getElementById('triageUpdate').value;
+                const doctorID = document.getElementById('doctorUpdate').value;
+                const description = document.getElementById('descriptionUpdate').value;
+        
+                const formData = {
+                    patientID: patientID,
+                    status: status,
+                    triage: triage,
+                    doctor: doctorID,
+                    description: description
+                };
+        
+                try {
+                    const response = await fetch(`/api/patient_status_update/${patientId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    if (response.ok) {
+                        // Reload the page after successful update
+                        window.location.reload();
+                    } else {
+                        console.error('Error updating patient status:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error updating patient status:', error);
+                }
+            });
+        }
+
+        function confirmDischarge(patientId){
+            document.getElementById('confirmDischarge').onclick = function() {
+                const reason = document.getElementById('dischargeReason').value;
+            
+                fetch(`/api/patient_discharge/${patientId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ reason: reason })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    $('#dischargeModal').modal('hide'); // Hide the modal
+                    window.location.href = '/dashboard'; // Redirect to the dashboard
+                })
+                .catch(error => console.error('Error:', error));
+            }    
+        }
+    
+        function confirmDeceased(patientId){
+            document.getElementById('confirmDeceased').onclick = function() {
+                
+                const reason = document.getElementById('deceasedReason').value;
+            
+                fetch(`/api/patient_deceased/${patientId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ reason: reason })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    $('#deceasedModal').modal('hide'); // Hide the modal
+                    window.location.href = '/dashboard'; // Redirect to the dashboard
+                })
+                .catch(error => console.error('Error:', error));
+            }
         }
     </script>
 </body>
